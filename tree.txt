@@ -1,0 +1,194 @@
+.
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── Directory.Build.props
+├── Directory.Packages.props
+├── global.json
+├── README.md
+├── SECURITY.md
+├── src
+│   ├── ServiceDefaults
+│   │   ├── Extensions.cs
+│   │   └── ServiceDefaults.csproj
+│   └── WebApi
+│       ├── appsettings.Development.json
+│       ├── appsettings.json
+│       ├── Common
+│       │   ├── Behaviours
+│       │   │   ├── LoggingBehaviour.cs
+│       │   │   ├── PerformanceBehaviour.cs
+│       │   │   ├── UnhandledExceptionBehaviour.cs
+│       │   │   └── ValidationErrorOrResultBehaviour.cs
+│       │   ├── Domain
+│       │   │   ├── Base
+│       │   │   │   ├── AggregateRoot.cs
+│       │   │   │   ├── Auditable.cs
+│       │   │   │   ├── Entity.cs
+│       │   │   │   ├── EventualConsistency
+│       │   │   │   │   ├── EventualConsistencyError.cs
+│       │   │   │   │   └── EventualConsistencyException.cs
+│       │   │   │   └── Interfaces
+│       │   │   │       ├── IAggregateRoot.cs
+│       │   │   │       ├── IAuditable.cs
+│       │   │   │       ├── IDomainEvent.cs
+│       │   │   │       └── IValueObject.cs
+│       │   │   ├── Heroes
+│       │   │   │   ├── Hero.cs
+│       │   │   │   ├── HeroByIdSpec.cs
+│       │   │   │   ├── HeroErrors.cs
+│       │   │   │   ├── Power.cs
+│       │   │   │   └── PowerLevelUpdatedEvent.cs
+│       │   │   └── Teams
+│       │   │       ├── Mission.cs
+│       │   │       ├── MissionErrors.cs
+│       │   │       ├── MissionStatus.cs
+│       │   │       ├── Team.cs
+│       │   │       ├── TeamByIdSpec.cs
+│       │   │       ├── TeamErrors.cs
+│       │   │       └── TeamStatus.cs
+│       │   ├── Interfaces
+│       │   │   ├── ICurrentUserService.cs
+│       │   │   ├── IEndpoint.cs
+│       │   │   ├── IFeature.cs
+│       │   │   └── IWebApiMarker.cs
+│       │   ├── Middleware
+│       │   │   └── EventualConsistencyMiddleware.cs
+│       │   ├── Persistence
+│       │   │   ├── ApplicationDbContext.cs
+│       │   │   ├── AuditableConfiguration.cs
+│       │   │   ├── DependencyInjection.cs
+│       │   │   ├── Heroes
+│       │   │   │   ├── ApplicationDbContext.Heroes.cs
+│       │   │   │   └── HeroConfiguration.cs
+│       │   │   ├── Interceptors
+│       │   │   │   ├── DispatchDomainEventsInterceptor.cs
+│       │   │   │   └── EntitySaveChangesInterceptor.cs
+│       │   │   ├── Migrations
+│       │   │   │   ├── 20250514063620_Initial.cs
+│       │   │   │   ├── 20250514063620_Initial.Designer.cs
+│       │   │   │   └── ApplicationDbContextModelSnapshot.cs
+│       │   │   ├── Teams
+│       │   │   │   ├── ApplicationDbContext.Teams.cs
+│       │   │   │   ├── MissionConfiguration.cs
+│       │   │   │   └── TeamConfiguration.cs
+│       │   │   └── VogenEfCoreConverters.cs
+│       │   └── Services
+│       │       └── CurrentUserService.cs
+│       ├── Features
+│       │   ├── Heroes
+│       │   │   ├── Commands
+│       │   │   │   ├── CreateHeroCommand.cs
+│       │   │   │   └── UpdateHeroCommand.cs
+│       │   │   ├── HeroesFeature.cs
+│       │   │   └── Queries
+│       │   │       └── GetAllHeroesQuery.cs
+│       │   └── Teams
+│       │       ├── Commands
+│       │       │   ├── AddHeroToTeamCommand.cs
+│       │       │   ├── CompleteMissionCommand.cs
+│       │       │   ├── CreateTeamCommand.cs
+│       │       │   └── ExecuteMissionCommand.cs
+│       │       ├── Events
+│       │       │   └── PowerLevelUpdatedEventHandler.cs
+│       │       ├── Queries
+│       │       │   ├── GetAllTeamsQuery.cs
+│       │       │   └── GetTeamQuery.cs
+│       │       └── TeamsFeature.cs
+│       ├── GlobalUsings.cs
+│       ├── Host
+│       │   ├── DependencyInjection.cs
+│       │   ├── EndpointDiscovery.cs
+│       │   ├── Extensions
+│       │   │   ├── CustomProblemDetailsExt.cs
+│       │   │   ├── CustomResult.cs
+│       │   │   ├── CustomScalarExt.cs
+│       │   │   ├── EndpointRouteBuilderExt.cs
+│       │   │   ├── EventualConsistencyMiddlewareExt.cs
+│       │   │   └── WebApplicationExt.cs
+│       │   └── FeatureDiscovery.cs
+│       ├── Program.cs
+│       ├── Properties
+│       │   └── launchSettings.json
+│       └── WebApi.csproj
+├── ssw-demo.sln
+├── ssw-demo.slnx
+├── tests
+│   ├── WebApi.ArchitectureTests
+│   │   ├── ApplicationTests.cs
+│   │   ├── Common
+│   │   │   ├── IsNotEnumRule.cs
+│   │   │   ├── NetArchTestExtensions.cs
+│   │   │   ├── TestBase.cs
+│   │   │   ├── TestResultAssertions.cs
+│   │   │   ├── TestResultExtensions.cs
+│   │   │   └── TypeExtensions.cs
+│   │   ├── DomainTests.cs
+│   │   ├── GlobalUsings.cs
+│   │   └── WebApi.ArchitectureTests.csproj
+│   ├── WebApi.IntegrationTests
+│   │   ├── AssemblyInfo.cs
+│   │   ├── Common
+│   │   │   ├── Factories
+│   │   │   │   ├── HeroFactory.cs
+│   │   │   │   └── TeamFactory.cs
+│   │   │   ├── Infrastructure
+│   │   │   │   ├── Database
+│   │   │   │   │   ├── SqlServerContainer.cs
+│   │   │   │   │   └── TestDatabase.cs
+│   │   │   │   └── Web
+│   │   │   │       └── WebApiTestFactory.cs
+│   │   │   ├── IntegrationTestBase.cs
+│   │   │   ├── TestingDatabaseFixture.cs
+│   │   │   └── Utilities
+│   │   │       └── Wait.cs
+│   │   ├── Endpoints
+│   │   │   ├── Heroes
+│   │   │   │   ├── Commands
+│   │   │   │   │   ├── CreateHeroCommandTests.cs
+│   │   │   │   │   └── UpdateHeroCommandTests.cs
+│   │   │   │   └── Queries
+│   │   │   │       └── GetAllHeroesQueryTests.cs
+│   │   │   └── Teams
+│   │   │       ├── Commands
+│   │   │       │   ├── AddHeroToTeamCommandTests.cs
+│   │   │       │   ├── CompleteMissionCommandTests.cs
+│   │   │       │   ├── CreateTeamCommandTests.cs
+│   │   │       │   └── ExecuteMissionCommandTests.cs
+│   │   │       ├── Events
+│   │   │       │   └── UpdatePowerLevelEventTests.cs
+│   │   │       └── Queries
+│   │   │           └── GetAllTeamsQueryTests.cs
+│   │   ├── GlobalUsings.cs
+│   │   └── WebApi.IntegrationTests.csproj
+│   └── WebApi.UnitTests
+│       ├── Features
+│       │   ├── Heroes
+│       │   │   ├── HeroTests.cs
+│       │   │   └── PowerTests.cs
+│       │   └── Teams
+│       │       ├── MissionTests.cs
+│       │       └── TeamTests.cs
+│       ├── GlobalUsings.cs
+│       └── WebApi.UnitTests.csproj
+└── tools
+    ├── AppHost
+    │   ├── AppHost.csproj
+    │   ├── appsettings.Development.json
+    │   ├── appsettings.json
+    │   ├── Extensions
+    │   │   └── SqlServerCommandExt.cs
+    │   ├── Program.cs
+    │   └── Properties
+    │       └── launchSettings.json
+    └── MigrationService
+        ├── Initializers
+        │   ├── ApplicationDbContextInitializer.cs
+        │   └── DbContextInitializerBase.cs
+        ├── MigrationService.csproj
+        ├── MigrationUserService.cs
+        ├── Program.cs
+        ├── Properties
+        │   └── launchSettings.json
+        └── Worker.cs
+
+60 directories, 132 files

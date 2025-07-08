@@ -1,0 +1,10 @@
+﻿global using Microsoft.EntityFrameworkCore;
+global using static System.ArgumentException;
+global using static System.ArgumentNullException;
+global using static System.ArgumentOutOfRangeException;
+global using Ardalis.Specification;
+global using FluentValidation;
+global using ErrorOr;
+global using Vogen;
+global using VSADemo.Common.Features;
+global using VSADemo.Common.Persistence;
