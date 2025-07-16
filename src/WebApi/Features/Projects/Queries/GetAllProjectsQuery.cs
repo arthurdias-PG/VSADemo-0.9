@@ -1,13 +1,13 @@
 using MediatR;
+using VSADemo.Common.Domain.Projects;
+using VSADemo.Features.Projects.DTOs;
 using VSADemo.Host.Extensions;
 
 namespace VSADemo.Features.Projects.Queries;
 
 public static class GetAllProjectsQuery
 {
-    public record ProjectDto(Guid Id, string Name);
-
-    public record Request : IRequest<ErrorOr<IReadOnlyList<ProjectDto>>>;
+    public record Request : IRequest<ErrorOr<IReadOnlyList<ProjectResponseDto>>>;
 
     public class Endpoint : IEndpoint
     {
@@ -23,7 +23,7 @@ public static class GetAllProjectsQuery
                         return result.Match(TypedResults.Ok, CustomResult.Problem);
                     })
                 .WithName("GetAllProjects")
-                .ProducesGet<IReadOnlyList<ProjectDto>>();
+                .ProducesGet<IReadOnlyList<ProjectResponseDto>>();
         }
     }
 
@@ -32,7 +32,7 @@ public static class GetAllProjectsQuery
         public Validator() { }
     }
 
-    internal sealed class Handler : IRequestHandler<Request, ErrorOr<IReadOnlyList<ProjectDto>>>
+    internal sealed class Handler : IRequestHandler<Request, ErrorOr<IReadOnlyList<ProjectResponseDto>>>
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -41,12 +41,12 @@ public static class GetAllProjectsQuery
             _dbContext = dbContext;
         }
 
-        public async Task<ErrorOr<IReadOnlyList<ProjectDto>>> Handle(
+        public async Task<ErrorOr<IReadOnlyList<ProjectResponseDto>>> Handle(
             Request request,
             CancellationToken cancellationToken)
         {
-            return await _dbContext.Projects
-                .Select(h => new ProjectDto(h.Id.Value, h.Name))
+            return await _dbContext.Projects.AsNoTracking().Include(p => p.Manager)
+                .Select(p => ProjectResponseDto.FromDomain(p))
                 .ToListAsync(cancellationToken);
         }
     }

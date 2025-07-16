@@ -62,7 +62,8 @@ public class ApplicationDbContextInitializer(ApplicationDbContext dbContext) : D
             // Seed the database
             await using var transaction = await DbContext.Database.BeginTransactionAsync(cancellationToken);
             var projects = await SeedProjectsAsync(cancellationToken);
-            await SeedManagersAsync(projects, cancellationToken);
+            var managers = await SeedManagersAsync(cancellationToken);
+            await AssignProjectsToManagerAsync(projects, managers, cancellationToken);
 
             // await DbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
@@ -94,11 +95,11 @@ public class ApplicationDbContextInitializer(ApplicationDbContext dbContext) : D
         return projects;
     }
 
-    private async Task SeedManagersAsync(List<Project> projects, CancellationToken cancellationToken)
+    private async Task<List<Manager>> SeedManagersAsync(CancellationToken cancellationToken)
     {
         if (DbContext.Managers.Any())
         {
-            return;
+            return new List<Manager>();
         }
 
         var faker = new Faker<Manager>()
@@ -109,15 +110,23 @@ public class ApplicationDbContextInitializer(ApplicationDbContext dbContext) : D
 
         var managers = faker.Generate(NumManagers).ToList();
 
-        // Now: for *each* project, pick a random manager and assign it
-        var rnd = new Random();
+        await DbContext.Managers.AddRangeAsync(managers, cancellationToken);
+        await DbContext.SaveChangesAsync(cancellationToken);
+
+        return managers;
+    }
+
+    private async Task AssignProjectsToManagerAsync(List<Project> projects, List<Manager> managers, CancellationToken cancellationToken)
+    {
+        // Randomly assign each project to a manager using Project.AssignManager
+        var faker = new Faker();
         foreach (var project in projects)
         {
-            var mgr = managers[rnd.Next(managers.Count)];
-            mgr.AssignProjects(new[] { project });
+            var manager = faker.PickRandom(managers);
+            project.AssignManager(manager.Id);
+            DbContext.Projects.Update(project);
         }
 
-        await DbContext.Managers.AddRangeAsync(managers, cancellationToken);
         await DbContext.SaveChangesAsync(cancellationToken);
     }
 }

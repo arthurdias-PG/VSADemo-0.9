@@ -49,38 +49,4 @@ public class Manager : AggregateRoot<ManagerId>
 
         return manager;
     }
-
-    public void AssignProjects(IEnumerable<Project> projects)
-    {
-        if (projects == null || !projects.Any())
-        {
-            throw new ArgumentException("Projects cannot be null or empty.", nameof(projects));
-        }
-
-        foreach (var project in projects)
-        {
-            if (_projects.Contains(project))
-            {
-                throw new InvalidOperationException($"Project {project.Id} is already assigned to this manager.");
-            }
-            _projects.Add(project);
-            AddDomainEvent(new ProjectAssignedEvent(this, project.Id));
-        }
-    }
-
-    public void RemoveProjects(IEnumerable<Project> projects)
-    {
-        if (projects == null || !projects.Any())
-        {
-            throw new ArgumentException("Projects cannot be null or empty.", nameof(projects));
-        }
-
-        foreach (var project in projects)
-        {
-            if (!_projects.Remove(project))
-            {
-                throw new InvalidOperationException($"Project {project.Id} is not assigned to this manager.");
-            }
-        }
-    }
 }

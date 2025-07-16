@@ -1,4 +1,5 @@
-﻿using VSADemo.Common.Domain.Base;
+﻿using System;
+using VSADemo.Common.Domain.Base;
 using VSADemo.Common.Domain.Managers;
 
 namespace VSADemo.Common.Domain.Projects;
@@ -33,10 +34,7 @@ public class Project : AggregateRoot<ProjectId>
         {
             ThrowIfLessThanOrEqual(value, DateTime.UtcNow, nameof(Deadline));
             ThrowIfEqual(value, DateTime.MaxValue, nameof(Deadline));
-            if (value.Kind != DateTimeKind.Utc)
-            {
-                throw new ArgumentException("Deadline must be in UTC.", nameof(Deadline));
-            }
+
             _deadline = value;
         }
     }
@@ -51,5 +49,21 @@ public class Project : AggregateRoot<ProjectId>
         var project = new Project { Id = ProjectId.From(Guid.CreateVersion7()), Name = name, Deadline = deadline };
 
         return project;
+    }
+
+    public void AssignManager(ManagerId managerId)
+    {
+        if (Manager is not null)
+        {
+            throw new InvalidOperationException("Project already has an assigned manager.");
+        }
+
+
+        if (DateTime.UtcNow > Deadline)
+        {
+            throw new InvalidOperationException("Cannot assign a manager to a project with a past deadline.");
+        }
+
+        ManagerId = managerId;
     }
 }

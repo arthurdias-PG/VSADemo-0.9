@@ -18,7 +18,7 @@ public static class CreateProjectCommand
                     async (ISender sender, Request request, CancellationToken ct) =>
                     {
                         var result = await sender.Send(request, ct);
-                        return result.Match(_ => TypedResults.Created(), CustomResult.Problem);
+                        return result.Match(id => TypedResults.Created($"/projects/{id}", id), CustomResult.Problem);
                     })
                 .WithName("CreateProject")
                 .ProducesPost();
