@@ -65,5 +65,6 @@ public class Project : AggregateRoot<ProjectId>
         }
 
         ManagerId = managerId;
+        AddDomainEvent(new ProjectAssignedToManagerEvent(this, managerId));
     }
 }
